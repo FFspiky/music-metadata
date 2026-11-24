@@ -1,0 +1,23 @@
+name: Test the complete audio fixture suite
+on:
+  push:
+    branches: [ci/vorbis-fingerprint-fixtures]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 38034dd95e2ab37a684258111ac3cb85152613fe
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Install pinned dependencies
+        run: |
+          npm install --global corepack
+          corepack enable
+          corepack yarn install --immutable
+      - name: Run all tests with the complete sample directory
+        run: corepack yarn test
